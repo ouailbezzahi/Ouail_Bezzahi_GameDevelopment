@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Project.Functions;
 using Project.Inputs;
 using Project.Interfaces;
 using System;
@@ -18,12 +19,14 @@ namespace Project.Characters
         private Vector2 _position;
         private float _speed = 2f;
         private Rectangle _deelRectangle;
+        private Weapon _weapon;
 
         public Hero(Texture2D texture)
         {
             _position = new Vector2(10, 10);
             _heroTexture = texture;
             _deelRectangle = new Rectangle(0, 0, 80, 94);
+            _weapon = new Weapon(3f);
         }
         public void Update(GameTime gameTime)
         {
@@ -61,7 +64,7 @@ namespace Project.Characters
         }
         public void UpgradeWeapon()
         {
-            //klasse.Upgrade()
+            _weapon.Upgrade();
         }
     }
 }
