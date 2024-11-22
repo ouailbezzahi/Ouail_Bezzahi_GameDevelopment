@@ -1,2 +1,2 @@
-﻿using var game = new Project.Game1();
+﻿using var game = new Project.ZombieGame();
 game.Run();

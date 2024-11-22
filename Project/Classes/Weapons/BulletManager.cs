@@ -7,12 +7,12 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project.Functions
+namespace Project.Classes.Weapons
 {
     public class BulletManager
     {
         //sprite kogels
-        private Texture2D _bulletTexture2D; 
+        private Texture2D _bulletTexture2D;
         //lijst kogels
         private List<Vector2> _bullets;
         //Snelheid kogels

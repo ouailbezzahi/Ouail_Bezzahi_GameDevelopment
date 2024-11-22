@@ -1,14 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Project.Characters;
+using Project.Classes.Hero;
 using Project.Inputs;
 using System;
 using System.Reflection.Metadata;
 
 namespace Project
 {
-    public class Game1 : Game
+    public class ZombieGame : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -16,7 +16,7 @@ namespace Project
         private Texture2D _heroTexture;
         Hero hero;
 
-        public Game1()
+        public ZombieGame()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -33,7 +33,7 @@ namespace Project
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _heroTexture = Content.Load<Texture2D>("Hero");
+            _heroTexture = Content.Load<Texture2D>("Hero/Hero Walking");
 
             InitializeGameObject();
             // TODO: use this.Content to load your game content here
@@ -41,7 +41,7 @@ namespace Project
 
         private void InitializeGameObject()
         {
-            hero = new Hero(_heroTexture);
+            hero = new Hero(_heroTexture, new Vector2(100, 400), 200f);
         }
 
         protected override void Update(GameTime gameTime)

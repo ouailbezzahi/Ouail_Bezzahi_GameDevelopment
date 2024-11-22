@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project.Functions
+namespace Project.Classes.Weapons
 {
     public class Weapon
     {

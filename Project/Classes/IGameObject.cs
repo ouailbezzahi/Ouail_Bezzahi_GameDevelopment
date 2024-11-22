@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project.Interfaces
+namespace Project.Classes
 {
     public interface IGameObject
     {
-        void Update(GameTime gameTime);
-        void Draw(SpriteBatch spriteBatch);
+        public void Update(GameTime gameTime) { }
+        public void Draw(SpriteBatch spriteBatch) { }
     }
 }
