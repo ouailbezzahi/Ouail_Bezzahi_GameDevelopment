@@ -11,6 +11,14 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\Bullets.png" />
+    <None Remove="Content\Hero Death.png" />
+    <None Remove="Content\Hero Ducking.png" />
+    <None Remove="Content\Hero Idle.png" />
+    <None Remove="Content\Hero Jump.png" />
+    <None Remove="Content\Hero Walking With Gun.png" />
+    <None Remove="Content\Hero Walking.png" />
+    <None Remove="Content\Hero.png" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
   </ItemGroup>
