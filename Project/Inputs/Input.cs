@@ -12,11 +12,17 @@ namespace Project.Inputs
         private static KeyboardState _currentKeyBoardState;
         private static KeyboardState _previousKeyBoardState;
 
+        private static MouseState _currentMouseState;
+        private static MouseState _previousMouseState;
+
         public static void Update()
         {
             //Vorige status wordt de nieuwe/huidige status en dan krijgt deze de GetState() methode
             _previousKeyBoardState = _currentKeyBoardState;
             _currentKeyBoardState = Keyboard.GetState();
+
+            _previousMouseState = _currentMouseState;
+            _currentMouseState = Mouse.GetState();
         }
 
         public static bool IsKeyPressed(Keys key)
@@ -30,15 +36,20 @@ namespace Project.Inputs
             //Controle of een toets ingedrukt wordt gehouden
             return _currentKeyBoardState.IsKeyDown(key);
         }
-        
-        //Bewegingen instellen
-        public static bool MoveUp() => IsKeyHeld(Keys.Up);
-        public static bool MoveDown() => IsKeyHeld(Keys.Down);
-        public static bool MoveLeft() => IsKeyHeld(Keys.Left);
-        public static bool MoveRight() => IsKeyHeld(Keys.Right);
 
-        //Schieten instellen
-        public static bool Shoot() => IsKeyHeld(Keys.Space);
+        // Controle of de linkermuisknop ingedrukt is
+        public static bool isLeftMouseClicked() =>
+            _currentMouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released;
+
+        //Bewegingen
+        public static bool MoveLeft() => IsKeyHeld(Keys.Q); //Q naar links
+        public static bool MoveRight() => IsKeyHeld(Keys.D); //D naar rechts
+
+        //Springen
+        public static bool Jump() => IsKeyPressed(Keys.Z); //Z springen
+
+        //Schieten
+        public static bool Shoot() => isLeftMouseClicked(); //Muisklik schieten
 
     }
 }
