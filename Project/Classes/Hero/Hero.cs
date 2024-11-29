@@ -12,80 +12,127 @@ using System.Threading.Tasks;
 
 namespace Project.Classes.Hero
 {
-    public class Hero : IGameObject
+    public class Hero
     {
-        private Texture2D _heroTexture;
+        private Texture2D _idleTexture;
+        private Texture2D _walkTexture;
+        private Texture2D _shootTexture;
+        private Texture2D _jumpTexture;
+
         private Vector2 _position;
         private float _speed;
-        private Weapon _weapon;
-        public HeroAnimationManager animManager;
 
         private bool _isJumping;
-        private float _jumpSpeed = -300f; //sprongsnelheid
-        private float _gravity = 800f; //zwaartekracht
-        private float _velocity; //Verticale snelheid
+        private bool _isShooting;
+        private float _jumpSpeed = -300f; // Sprongsnelheid
+        private float _gravity = 800f;    // Zwaartekracht
+        private float _velocity;         // Verticale snelheid
 
-        //Constructor
+        private HeroAnimationManager _animManager; // Animatie Manager
 
-        public Hero(Texture2D texture, Vector2 startPosition, float speed)
+        private const float GroundLevel = 400f; // Grondniveau
+
+        // Constructor
+        public Hero(Texture2D idleTexture, Texture2D walkTexture, Texture2D shootTexture, Texture2D jumpTexture, Vector2 startPosition, float speed)
         {
-            _heroTexture = texture;
+            _idleTexture = idleTexture;
+            _walkTexture = walkTexture;
+            _shootTexture = shootTexture;
+            _jumpTexture = jumpTexture;
+
             _position = startPosition;
             _speed = speed;
+
             _isJumping = false;
+            _isShooting = false;
+
+            // Initialiseer de animatiemanager
+            _animManager = new HeroAnimationManager(
+                _idleTexture,
+                _walkTexture,
+                _shootTexture,
+                _jumpTexture,
+                80,  // Frame width
+                90,  // Frame height
+                6,   // Aantal frames per animatie
+                0.1f // Frame time
+            );
+
+            // Zet de animatie naar Idle zodra de held wordt aangemaakt
+            _animManager.SetAnimation("Idle");
         }
+
         public void Update(GameTime gameTime)
         {
-            //Verstreken tijd
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            //Beweeg naar links
+            // Beweging (horizontaal)
             if (Input.MoveLeft())
             {
                 _position = new Vector2(_position.X - _speed * deltaTime, _position.Y);
+                _animManager.SetAnimation("Walk"); // Zet de animatie op walk
             }
-            //Beweeg naar rechts
-            if (Input.MoveRight())
+            else if (Input.MoveRight())
             {
                 _position = new Vector2(_position.X + _speed * deltaTime, _position.Y);
+                _animManager.SetAnimation("Walk"); // Zet de animatie op walk
             }
-            //Springen
+            else if (!_isJumping) // Alleen idle wanneer de speler niet springt
+            {
+                // Wanneer er geen beweging is en de speler niet springt, toon de idle animatie
+                _animManager.SetAnimation("Idle");
+            }
+
+            // Springen
             if (Input.Jump() && !_isJumping)
             {
                 _isJumping = true;
-                _velocity = _jumpSpeed;
+                _velocity = _jumpSpeed; // Begin met de sprongsnelheid
+                _animManager.SetAnimation("Jump"); // Zet de jump animatie in gang
             }
 
-            //Toepassen zwaartekracht
+            // Als de speler springt, pas de verticale snelheid en positie aan
             if (_isJumping)
             {
-                _velocity += _gravity * deltaTime;
+                _velocity += _gravity * deltaTime; // Pas de zwaartekracht toe
 
-                //Controle of held de grond raakt
-                if (_position.Y >= 400) //400 is dus grondniveau maar kan later veranderd worden
+                // Verander de positie van de speler
+                _position = new Vector2(_position.X, _position.Y + _velocity * deltaTime);
+
+                // Controleer of de speler de grond heeft bereikt
+                if (_position.Y >= GroundLevel)
                 {
                     _isJumping = false;
-                    _position = new Vector2(_position.X, 400); //Terug naar de grond zetten
+                    _position = new Vector2(_position.X, GroundLevel); // Zet de speler op de grond
+                    _velocity = 0f; // Zet de verticale snelheid weer op 0
+
+                    // Pas de animatie aan zodra de speler weer op de grond staat
+                    if (Input.MoveLeft() || Input.MoveRight())
+                    {
+                        _animManager.SetAnimation("Walk"); // Als er beweging is, toon de walk animatie
+                    }
+                    else
+                    {
+                        _animManager.SetAnimation("Idle"); // Als er geen beweging is, toon de idle animatie
+                    }
                 }
             }
+
+            // Schieten (indien ingedrukt)
             if (Input.Shoot())
             {
-                //nog een commando erbij schrijven
+                _isShooting = true;
+                _animManager.SetAnimation("Shoot"); // Zet de shoot animatie in gang
             }
 
-            //commando moet hier geupdate worden (nieuwe klasse die shoot definieert)!
+            // Update de animatie
+            _animManager.Update(gameTime);
         }
+
         public void Draw(SpriteBatch spriteBatch)
         {
-            //Tekent de hero
-            spriteBatch.Draw(_heroTexture, _position, Color.White);
-
-            //Teken de bullets
-            //Hier nieuwe commando ervoor dus klasse.Draw(spriteBatch)
-        }
-        public void UpgradeWeapon()
-        {
-            _weapon.Upgrade();
+            _animManager.Draw(spriteBatch, _position, Color.White);
         }
     }
+
 }

@@ -13,7 +13,13 @@ namespace Project
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private Texture2D _heroTexture;
+        // Textures voor verschillende animaties
+        private Texture2D _idleTexture;
+        private Texture2D _walkTexture;
+        private Texture2D _shootTexture;
+        private Texture2D _jumpTexture;
+
+        //Hero & animanager
         Hero hero;
 
         public ZombieGame()
@@ -33,7 +39,12 @@ namespace Project
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _heroTexture = Content.Load<Texture2D>("Hero/Hero Walking");
+
+            // Verschillende animatie-textures
+            _idleTexture = Content.Load<Texture2D>("Hero/Hero Idle");
+            _walkTexture = Content.Load<Texture2D>("Hero/Hero Walking");
+            _shootTexture = Content.Load<Texture2D>("Hero/Hero Walking With Gun");
+            _jumpTexture = Content.Load<Texture2D>("Hero/Hero Jump");
 
             InitializeGameObject();
             // TODO: use this.Content to load your game content here
@@ -41,7 +52,8 @@ namespace Project
 
         private void InitializeGameObject()
         {
-            hero = new Hero(_heroTexture, new Vector2(100, 400), 200f);
+            // Initialiseer de hero met de juiste animaties
+            hero = new Hero(_idleTexture, _walkTexture, _shootTexture, _jumpTexture, new Vector2(100, 400), 200f);
         }
 
         protected override void Update(GameTime gameTime)
@@ -60,11 +72,13 @@ namespace Project
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            // Begin met tekenen
             _spriteBatch.Begin();
 
+            // Teken de hero
             hero.Draw(_spriteBatch);
 
+            // Stop met tekenen
             _spriteBatch.End();
 
             base.Draw(gameTime);
