@@ -46,7 +46,7 @@ namespace Project.Inputs
         public static bool MoveRight() => IsKeyHeld(Keys.D); //D naar rechts
 
         //Springen
-        public static bool Jump() => IsKeyPressed(Keys.Z); //Z springen
+        public static bool Jump() => IsKeyHeld(Keys.Z); //Z springen
 
         //Schieten
         public static bool Shoot() => isLeftMouseClicked(); //Muisklik schieten
